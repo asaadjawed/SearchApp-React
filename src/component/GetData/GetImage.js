@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
+import LoaderImg from '../../images/loader.gif';
 
 export const GetImagesData = () => {
   const [imageData, setImageData] = useState({});
   const [name, setName] = useState("");
   const [list, setList] = useState(0);
+  const [loader,setLoader] = useState(false);
 
   return (
     <>
@@ -13,9 +15,20 @@ export const GetImagesData = () => {
         <h1>Get Details of Your Favourite</h1>
       </div>
 
+     {
+        loader && (
+            <div>
+                <img src={LoaderImg} />
+            </div>
+        )
+     }
+
       <form
         onSubmit={(e) => {
+            
           e.preventDefault();
+          setLoader(true)
+
           axios({
             method: "GET",
             url: "https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/Search/ImageSearchAPI",
@@ -34,6 +47,7 @@ export const GetImagesData = () => {
           })
             .then((res) => {
               console.log(res.data, "response in API");
+              setLoader(false)
               setImageData(res.data);
               console.log(imageData, "how ");
             })
@@ -115,6 +129,9 @@ export const GetImagesData = () => {
           </div>
         </div>
       </div>
+
+
+
     </>
   );
 };
